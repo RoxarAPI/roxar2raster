@@ -1,6 +1,7 @@
 import io
 
 import numpy as np
+import numpy.ma
 
 from PIL import Image
 
@@ -28,15 +29,19 @@ def array2d_to_png(z_array, z_offset=0., z_scale=1.):
 
     shape = z_array.shape
 
+    z_array.fill_value = np.NaN
+
     z_array += z_offset
 
     z_array *= z_scale
 
+    z_array = np.ma.filled(z_array)
+
     z_array = np.repeat(z_array, 4)  # This will flatten the array
 
-    #z_array[0::4][np.isnan(z_array[0::4])] = 0  # Red
-    #z_array[1::4][np.isnan(z_array[1::4])] = 0  # Green
-    #z_array[2::4][np.isnan(z_array[2::4])] = 0  # Blue
+    z_array[0::4][np.isnan(z_array[0::4])] = 0  # Red
+    z_array[1::4][np.isnan(z_array[1::4])] = 0  # Green
+    z_array[2::4][np.isnan(z_array[2::4])] = 0  # Blue
 
     z_array[0::4] = np.floor((z_array[0::4] / (256 * 256)) % 256)  # Red
     z_array[1::4] = np.floor((z_array[1::4] / 256) % 256)  # Green
@@ -88,4 +93,5 @@ def get_surface_normalized(project, name, category):
 
 def get_surface_absolute(project, name, category):
     surface = xtgeo.surface_from_roxar(project, name, category)
-    return array2d_to_png(surface.values, z_offset=10000, z_scale=100)
+    return array2d_to_png(surface.values, z_offset=0, z_scale=1)
+
