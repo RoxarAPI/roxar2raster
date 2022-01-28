@@ -60,13 +60,9 @@ def array2d_to_webviz_float(z_array):
     z_array[0::4] = np.floor((z_array[0::4] / (256 * 256)) % 256)  # Red
     z_array[1::4] = np.floor((z_array[1::4] / 256) % 256)  # Green
     z_array[2::4] = np.floor(z_array[2::4] % 256)  # Blue
-    #z_array[3::4] = np.where(np.isnan(z_array[3::4]), 0, 255)  # Alpha
     z_array[3::4] = np.log10(z_array[3::4])
 
     # Back to 2d shape + 1 dimension for the rgba values.
-    #z_array = z_array.reshape((shape[0], shape[1], 4))
-    #print(np.uint8(z_array))
-    import sys; sys.exit(0)
     image = Image.fromarray(np.uint8(z_array), "RGBA")
 
     byte_io = io.BytesIO()
