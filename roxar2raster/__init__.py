@@ -13,6 +13,68 @@ import roxarlib.data2model
 import xtgeo
 import xtgeo.plot
 
+def array2d_to_ieee_float(z_array):
+    shape = z_array.shape
+
+    z_array = z_array.astype(np.float32)
+
+    z_array.fill_value = np.NaN
+
+    z_array = np.ma.filled(z_array)
+
+    byte_array = np.frombuffer(z_array.tobytes(), dtype=np.uint8)
+    byte_array = byte_array.reshape((shape[0], shape[1], 4))
+
+    image = Image.fromarray(byte_array, "RGBA")
+
+    byte_io = io.BytesIO()
+    image.save(byte_io, format="png")
+    byte_io.seek(0)
+
+    test_image = Image.open(byte_io)
+
+    test_buffer = test_image.tobytes(encoder_name='raw')
+
+    test_array = np.frombuffer(test_buffer, dtype=np.dtype('float32'))
+    test_array = test_array.reshape((shape[0], shape[1]))
+
+    byte_io.seek(0)
+
+    assert(np.array_equal(test_array, z_array, equal_nan=True))
+
+    return byte_io
+
+def array2d_to_webviz_float(z_array):
+    shape = z_array.shape
+
+    z_array.fill_value = np.NaN
+
+    z_array = np.ma.filled(z_array)
+
+    z_array = np.repeat(z_array, 4)  # This will flatten the array
+
+    z_array[0::4][np.isnan(z_array[0::4])] = 0  # Red
+    z_array[1::4][np.isnan(z_array[1::4])] = 0  # Green
+    z_array[2::4][np.isnan(z_array[2::4])] = 0  # Blue
+
+    z_array[0::4] = np.floor((z_array[0::4] / (256 * 256)) % 256)  # Red
+    z_array[1::4] = np.floor((z_array[1::4] / 256) % 256)  # Green
+    z_array[2::4] = np.floor(z_array[2::4] % 256)  # Blue
+    #z_array[3::4] = np.where(np.isnan(z_array[3::4]), 0, 255)  # Alpha
+    z_array[3::4] = np.log10(z_array[3::4])
+
+    # Back to 2d shape + 1 dimension for the rgba values.
+    #z_array = z_array.reshape((shape[0], shape[1], 4))
+    #print(np.uint8(z_array))
+    import sys; sys.exit(0)
+    image = Image.fromarray(np.uint8(z_array), "RGBA")
+
+    byte_io = io.BytesIO()
+    image.save(byte_io, format="png")
+    byte_io.seek(0)
+
+    return byte_io
+
 def array2d_to_png(z_array, z_offset=0., z_scale=1.):
     """The DeckGL map dash component takes in pictures as base64 data
     (or as a link to an existing hosted image). I.e. for containers wanting
@@ -84,14 +146,22 @@ def get_surface(project, name, category):
     surface.quickplot(filename=stream)
     return stream
 
-def get_surface_normalized(project, name, category):
-    surface = xtgeo.surface_from_roxar(project, name, category)
+def get_surface_normalized(project, name, category, stype):
+    surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
     min_value = np.nanmin(surface.values)
     max_value = np.nanmax(surface.values)
     scale_factor = (256 * 256 * 256 - 1) / (max_value - min_value)
     return array2d_to_png((surface.values - min_value) * scale_factor)
 
-def get_surface_absolute(project, name, category):
-    surface = xtgeo.surface_from_roxar(project, name, category)
+def get_surface_absolute(project, name, category, stype):
+    surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
     return array2d_to_png(surface.values, z_offset=0, z_scale=1)
+
+def get_surface_webviz_float(project, name, category, stype):
+    surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
+    return array2d_to_webviz_float(surface.values)
+
+def get_surface_ieee_float(project, name, category, stype):
+    surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
+    return array2d_to_ieee_float(surface.values)
 

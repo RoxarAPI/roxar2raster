@@ -24,7 +24,10 @@ if __name__ == "__main__":
         PARSER.add_argument(
                 "-c", "--category", type=str, help="Surface category."
         )
-
+        PARSER.add_argument(
+                "-l", "--clipboard", help="Use clipboard.", action="store_true"
+        )
+        stype = "horizon"
     ARGS = PARSER.parse_args()
 
     image = None
@@ -39,15 +42,26 @@ if __name__ == "__main__":
                 if PARSER.prog == "structmod2raster":
                     image = roxar2raster.get_structural_model(roxar_project)
                 elif PARSER.prog == "surface2raster":
+                    category = ARGS.category
+                    stype = "horizons"
+                    if ARGS.clipboard:
+                        stype = "clipboard"
+                        category = None
                     if ARGS.encoding == "webviz_absolute":
                         image = roxar2raster.get_surface_absolute(
-                                roxar_project, ARGS.name, ARGS.category)
+                                roxar_project, ARGS.name, category, stype)
                     elif ARGS.encoding == "webviz_normalized":
                         image = roxar2raster.get_surface_normalized(
-                                roxar_project, ARGS.name, ARGS.category)
+                                roxar_project, ARGS.name, category, stype)
+                    elif ARGS.encoding == "webviz_float":
+                        image = roxar2raster.get_surface_webviz_float(
+                                roxar_project, ARGS.name, category, stype)
+                    elif ARGS.encoding == "ieee_float":
+                        image = roxar2raster.get_surface_ieee_float(
+                                roxar_project, ARGS.name, category, stype)
                     else:
                         image = roxar2raster.get_surface(
-                                roxar_project, ARGS.name, ARGS.category)
+                                roxar_project, ARGS.name, category)
         except NotImplementedError:
             print("Error: Roxar API needed.", file=sys.stderr)
 
