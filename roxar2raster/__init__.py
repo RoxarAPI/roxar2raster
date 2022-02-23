@@ -13,6 +13,8 @@ import roxarlib.data2model
 import xtgeo
 import xtgeo.plot
 
+__version__ = "0.0.1"
+
 def array2d_to_ieee_float(z_array):
     shape = z_array.shape
 
