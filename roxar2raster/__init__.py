@@ -13,6 +13,8 @@ import roxarlib.data2model
 import xtgeo
 import xtgeo.plot
 
+__version__ = "0.0.1"
+
 def clip(values):
     margin = 10
     north = np.roll(values, margin, 0)
