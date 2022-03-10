@@ -88,7 +88,7 @@ def array2d_to_webviz_float(z_array):
 
     return byte_io
 
-def array2d_to_png(z_array, z_offset=0., z_scale=1., margin=None):
+def array2d_to_png(z_array, z_offset=0., z_scale=1., margin=np.ma.masked_array.mask):
     """The DeckGL map dash component takes in pictures as base64 data
     (or as a link to an existing hosted image). I.e. for containers wanting
     to create pictures on-the-fly from numpy arrays, they have to be converted
@@ -161,41 +161,30 @@ def get_structural_model(project):
 
     return image
 
-def get_surface(project, name, category, stype, margin):
+def get_surface(project, name, category, stype):
     stream = io.BytesIO()
-    sys.stderr.write("Error: margin not supported.")
-    sys.stderr.flush()
-    if margin:
-        return stream
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
     surface.quickplot(filename=stream)
     return stream
 
-def get_surface_normalized(project, name, category, stype, margin):
+def get_surface_normalized(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
     values = surface.values
-    if margin:
-        margin = get_margin(surface.values)
+    margin = get_margin(surface.values)
     min_value = np.nanmin(surface.values)
     max_value = np.nanmax(surface.values)
     scale_factor = (256 * 256 * 256 - 1) / (max_value - min_value)
     return array2d_to_png((values - min_value) * scale_factor, margin=margin)
 
-def get_surface_absolute(project, name, category, stype, margin):
+def get_surface_absolute(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
-    if margin:
-        margin = get_margin(surface.values)
     return array2d_to_png(surface.values, z_offset=0, z_scale=1)
 
-def get_surface_webviz_float(project, name, category, stype, margin):
+def get_surface_webviz_float(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
-    if margin:
-        margin = get_margin(surface.values)
     return array2d_to_webviz_float(surface.values)
 
-def get_surface_ieee_float(project, name, category, stype, margin):
+def get_surface_ieee_float(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
-    if margin:
-        margin = get_margin(surface.values)
     return array2d_to_ieee_float(surface.values)
 
