@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.1.1 (2022-03-10)
+### Fix
+* Fixed margin calculation for normalized surfaces. ([`1a88928`](https://github.com/RoxarAPI/roxar2raster/commit/1a889280cccd9a5ebd85377032d330dc1758cabf))
+
 ## v0.1.0 (2022-02-23)
 ### Feature
 * **surface2raster:** Added margin clipping option. ([`07a2c95`](https://github.com/RoxarAPI/roxar2raster/commit/07a2c954c982fdf62309acd05d88612818528844))
