@@ -22,7 +22,7 @@ if __name__ == "__main__":
                 "-n", "--name", type=str, help="Surface name."
         )
         PARSER.add_argument(
-                "-c", "--category", type=str, help="Surface category."
+                "-c", "--category", type=str, help="Surface category. If clipboard is used, this corresponds to a clipboard folder path."
         )
         PARSER.add_argument(
                 "-l", "--clipboard", help="Use clipboard.", action="store_true"
@@ -49,7 +49,6 @@ if __name__ == "__main__":
                     stype = "horizons"
                     if ARGS.clipboard:
                         stype = "clipboard"
-                        category = None
                     if ARGS.encoding == "webviz_absolute":
                         image = roxar2raster.get_surface_absolute(
                                 roxar_project, ARGS.name, category, stype, ARGS.margin)
