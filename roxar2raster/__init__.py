@@ -6,9 +6,6 @@ import numpy.ma
 from PIL import Image
 
 from roxar2json import roxar_proxy as roxar
-import roxarlib
-import roxarlib.structure_rms13 as roxstruct
-import roxarlib.data2model
 
 import xtgeo
 import xtgeo.plot
@@ -140,26 +137,6 @@ def array2d_to_png(z_array, z_offset=0., z_scale=1., margin=np.ma.masked_array.m
     byte_io.seek(0)
 
     return byte_io
-
-def get_structural_model(project):
-    realization = 1
-
-    hm = project.structural_models['DepthModelFromHUM'].horizon_models['GeologicHorizons']
-
-    model_geometry = hm.get_geometry(realization)
-    print(help(model_geometry))
-
-
-    bbox = hm.get_bounding_box()
-    v0 = bbox[0]
-    v2 = bbox[1]
-    fence = [v0, v2]
-    z_min_max = (v0[2], v2[2])
-
-    image_size = (500, 1000) # using matrix indexing: rows, columns
-    image = roxstruct.create_fence_image(fence, z_min_max, hm.get_geometry(1), image_size=image_size)
-
-    return image
 
 def get_surface(project, name, category, stype):
     stream = io.BytesIO()
