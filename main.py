@@ -39,9 +39,7 @@ if __name__ == "__main__":
     for path in ARGS.project:
         try:
             with roxar.Project.open(path, readonly=True) as roxar_project:
-                if PARSER.prog == "structmod2raster":
-                    image = roxar2raster.get_structural_model(roxar_project)
-                elif PARSER.prog == "surface2raster":
+                if PARSER.prog == "surface2raster":
                     category = ARGS.category
                     stype = "horizons"
                     if ARGS.clipboard:
