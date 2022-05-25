@@ -5,7 +5,7 @@ import numpy.ma
 
 from PIL import Image
 
-from roxar2json import roxar_proxy as roxar
+import roxar_proxy as roxar
 
 import xtgeo
 import xtgeo.plot

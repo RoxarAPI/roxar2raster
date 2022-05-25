@@ -23,6 +23,8 @@ setuptools.setup(
     packages=["roxar2raster"],
     python_requires=">=3.7",
     install_requires=[
+        "xtgeo",
+        "numpy>=1.20",
         "roxar_proxy @ git+https://github.com/RoxarAPI/roxar_proxy#egg=roxar_proxy",
     ]
 )

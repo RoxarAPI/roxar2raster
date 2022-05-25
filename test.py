@@ -7,11 +7,11 @@ import numpy
 import roxar2raster
 
 
-class TestClip(unittest.TestCase):
+class TestMargin(unittest.TestCase):
     def test_None(self):
         surface = None
         with self.assertRaises(numpy.AxisError):
-            roxar2raster.clip(surface)
+            roxar2raster.get_margin(surface)
 
 if __name__ == "__main__":
     result = unittest.main(exit=False, verbosity=1)
