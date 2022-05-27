@@ -12,6 +12,28 @@ import xtgeo.plot
 
 __version__ = "0.2.0"
 
+PAD_WIDTH = 2
+
+def pad_frame(values):
+    mask = values.mask
+    mask = numpy.pad(mask, PAD_WIDTH, "constant", constant_values=True)
+    return numpy.ma.masked_array(numpy.pad(values, PAD_WIDTH, "edge"), mask)
+
+def pad_border(values):
+    clipped_values = np.ma.filled(values, np.NaN)
+    north = np.roll(clipped_values, 1, 0)
+    south = np.roll(clipped_values, -1, 0)
+    west = np.roll(clipped_values, 1, 1)
+    east = np.roll(clipped_values, -1, 1)
+    border = np.fmax(np.fmax(np.fmax(north, south), west), east)
+    border_masked = np.ma.masked_invalid(border)
+    padded = np.fmax(border, values.data)
+    return np.ma.masked_array(padded, np.logical_and(values.mask, border_masked.mask))
+
+def pad(values):
+    padded = pad_border(pad_border(values))
+    padded.mask = values.mask
+    return pad_frame(padded)
 
 def get_margin(values):
     clipped_values = np.ma.filled(values, np.NaN)
