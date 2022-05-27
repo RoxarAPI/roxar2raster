@@ -2,6 +2,10 @@
 
 <!--next-version-placeholder-->
 
+## v0.3.0 (2022-05-27)
+### Feature
+* Added padding calculation. ([`3d37b79`](https://github.com/RoxarAPI/roxar2raster/commit/3d37b79e103d9aa9cfd169ab4648389895c8179c))
+
 ## v0.2.0 (2022-05-25)
 ### Feature
 * Remove structure model output. ([`af3b167`](https://github.com/RoxarAPI/roxar2raster/commit/af3b1671632e870da04c5cd493ac27e61118c4dd))
