@@ -24,6 +24,7 @@ setuptools.setup(
     python_requires=">=3.7",
     install_requires=[
         "xtgeo",
+        "pillow",
         "numpy>=1.20",
         "roxar_proxy @ git+https://github.com/RoxarAPI/roxar_proxy#egg=roxar_proxy",
     ]

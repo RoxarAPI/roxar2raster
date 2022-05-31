@@ -48,7 +48,7 @@ def get_margin(values):
     mask = np.ma.masked_invalid(clipped_values)
     mask = np.ma.getmask(mask)
     return mask
-    
+
 def array2d_to_ieee_float(z_array):
     shape = z_array.shape
 
@@ -168,8 +168,7 @@ def get_surface(project, name, category, stype):
 
 def get_surface_normalized(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
-    values = surface.values
-    margin = get_margin(surface.values)
+    values = pad(surface.values)
     min_value = np.nanmin(surface.values)
     max_value = np.nanmax(surface.values)
     scale_factor = (256 * 256 * 256 - 1) / (max_value - min_value)
