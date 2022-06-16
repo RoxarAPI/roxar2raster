@@ -121,6 +121,11 @@ def array2d_to_png(z_array, z_offset=0., z_scale=1., margin=np.ma.masked_array.m
     shifted to start from 0.
     """
 
+    # Rotate 90 deg left.
+    # This will cause the width of the png to run along the X axis
+    # and height of the png along Y axis (starting from bottom.)
+    z_array = np.rot90(z_array)
+
     shape = z_array.shape
 
     z_array.fill_value = np.NaN
