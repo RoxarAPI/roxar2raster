@@ -14,10 +14,12 @@ __version__ = "0.3.0"
 
 PAD_WIDTH = 2
 
+
 def pad_frame(values):
     mask = values.mask
     mask = numpy.pad(mask, PAD_WIDTH, "constant", constant_values=True)
     return numpy.ma.masked_array(numpy.pad(values, PAD_WIDTH, "edge"), mask)
+
 
 def pad_border(values):
     clipped_values = np.ma.filled(values, np.NaN)
@@ -30,10 +32,12 @@ def pad_border(values):
     padded = np.fmax(border, values.data)
     return np.ma.masked_array(padded, np.logical_and(values.mask, border_masked.mask))
 
+
 def pad(values):
     padded = pad_border(pad_border(values))
     padded.mask = values.mask
     return pad_frame(padded)
+
 
 def get_margin(values):
     clipped_values = np.ma.filled(values, np.NaN)
@@ -43,12 +47,13 @@ def get_margin(values):
     west = np.roll(clipped_values, margin, 1)
     east = np.roll(clipped_values, -margin, 1)
     mask = north * south * west * east
-    mask[~np.isnan(mask)] = 1.
+    mask[~np.isnan(mask)] = 1.0
     clipped_values *= mask
     mask = np.ma.masked_invalid(clipped_values)
     mask = np.ma.getmask(mask)
     return mask
-    
+
+
 def array2d_to_webviz_float(z_array):
     shape = z_array.shape
 
@@ -76,7 +81,8 @@ def array2d_to_webviz_float(z_array):
 
     return byte_io
 
-def array2d_to_png(z_array, z_offset=0., z_scale=1., margin=np.ma.masked_array.mask):
+
+def array2d_to_png(z_array, z_offset=0.0, z_scale=1.0, margin=np.ma.masked_array.mask):
     """The DeckGL map dash component takes in pictures as base64 data
     (or as a link to an existing hosted image). I.e. for containers wanting
     to create pictures on-the-fly from numpy arrays, they have to be converted
@@ -112,7 +118,7 @@ def array2d_to_png(z_array, z_offset=0., z_scale=1., margin=np.ma.masked_array.m
 
     max_value = np.nanmax(z_array)
     min_value = np.nanmin(z_array)
-    mean_value = (min_value + max_value) * .5
+    mean_value = (min_value + max_value) * 0.5
 
     z_array = np.repeat(z_array, 4)  # This will flatten the array
     unfilled = np.repeat(unfilled, 4)  # This will flatten the array
@@ -134,11 +140,13 @@ def array2d_to_png(z_array, z_offset=0., z_scale=1., margin=np.ma.masked_array.m
 
     return byte_io
 
+
 def get_surface(project, name, category, stype):
     stream = io.BytesIO()
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
     surface.quickplot(filename=stream)
     return stream
+
 
 def get_surface_normalized(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
@@ -149,17 +157,21 @@ def get_surface_normalized(project, name, category, stype):
     scale_factor = (256 * 256 * 256 - 1) / (max_value - min_value)
     return array2d_to_png((values - min_value) * scale_factor, margin=margin)
 
+
 def get_surface_absolute(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
     return array2d_to_png(surface.values, z_offset=0, z_scale=1)
+
 
 def get_surface_webviz_float(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
     return array2d_to_webviz_float(surface.values)
 
+
 def get_surface_ieee_float(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
     return array2d_to_ieee_float(surface.values)
+
 
 def get_surface_npz(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
@@ -171,6 +183,7 @@ def get_surface_npz(project, name, category, stype):
     byte_io.seek(0)
     return byte_io
 
+
 def get_surface_float32(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
     values = surface.values.astype(np.float32)
@@ -180,4 +193,3 @@ def get_surface_float32(project, name, category, stype):
     byte_io.write(values.tobytes())
     byte_io.seek(0)
     return byte_io
-
