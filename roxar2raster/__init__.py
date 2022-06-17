@@ -1,11 +1,9 @@
-import io, sys
+import io
 
 import numpy as np
 import numpy.ma
 
 from PIL import Image
-
-import roxar_proxy as roxar
 
 import xtgeo
 import xtgeo.plot
@@ -166,11 +164,6 @@ def get_surface_absolute(project, name, category, stype):
 def get_surface_webviz_float(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
     return array2d_to_webviz_float(surface.values)
-
-
-def get_surface_ieee_float(project, name, category, stype):
-    surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
-    return array2d_to_ieee_float(surface.values)
 
 
 def get_surface_npz(project, name, category, stype):

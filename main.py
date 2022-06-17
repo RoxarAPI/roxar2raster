@@ -3,7 +3,6 @@
 import argparse
 import sys
 import os
-import json
 
 import roxar2raster
 import roxar_proxy as roxar
