@@ -2,6 +2,13 @@
 
 <!--next-version-placeholder-->
 
+## v0.4.0 (2022-06-17)
+### Feature
+* Added compressed numpy and float32 buffer encoding. ([`299e311`](https://github.com/RoxarAPI/roxar2raster/commit/299e3115e288dc60fee7966b3f872222a0760c55))
+
+### Fix
+* Applied flake8 conditions. ([`0ec7e0b`](https://github.com/RoxarAPI/roxar2raster/commit/0ec7e0be0a681f1026d882c5a74df4ee153834df))
+
 ## v0.3.0 (2022-05-27)
 ### Feature
 * Added padding calculation. ([`3d37b79`](https://github.com/RoxarAPI/roxar2raster/commit/3d37b79e103d9aa9cfd169ab4648389895c8179c))

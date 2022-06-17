@@ -8,7 +8,7 @@ from PIL import Image
 import xtgeo
 import xtgeo.plot
 
-__version__ = "0.3.0"
+__version__ = "0.4.0"
 
 PAD_WIDTH = 2
 
