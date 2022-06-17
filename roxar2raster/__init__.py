@@ -49,37 +49,6 @@ def get_margin(values):
     mask = np.ma.getmask(mask)
     return mask
     
-def array2d_to_ieee_float(z_array):
-    shape = z_array.shape
-
-    z_array = z_array.astype(np.float32)
-
-    z_array.fill_value = np.NaN
-
-    z_array = np.ma.filled(z_array)
-
-    byte_array = np.frombuffer(z_array.tobytes(), dtype=np.uint8)
-    byte_array = byte_array.reshape((shape[0], shape[1], 4))
-
-    image = Image.fromarray(byte_array, "RGBA")
-
-    byte_io = io.BytesIO()
-    image.save(byte_io, format="png")
-    byte_io.seek(0)
-
-    test_image = Image.open(byte_io)
-
-    test_buffer = test_image.tobytes(encoder_name='raw')
-
-    test_array = np.frombuffer(test_buffer, dtype=np.dtype('float32'))
-    test_array = test_array.reshape((shape[0], shape[1]))
-
-    byte_io.seek(0)
-
-    assert(np.array_equal(test_array, z_array, equal_nan=True))
-
-    return byte_io
-
 def array2d_to_webviz_float(z_array):
     shape = z_array.shape
 
@@ -191,4 +160,24 @@ def get_surface_webviz_float(project, name, category, stype):
 def get_surface_ieee_float(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
     return array2d_to_ieee_float(surface.values)
+
+def get_surface_npz(project, name, category, stype):
+    surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
+    values = surface.values.astype(np.float32)
+    values.fill_value = np.NaN
+    values = np.ma.filled(values)
+    byte_io = io.BytesIO()
+    np.savez(byte_io, values)
+    byte_io.seek(0)
+    return byte_io
+
+def get_surface_float32(project, name, category, stype):
+    surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
+    values = surface.values.astype(np.float32)
+    values.fill_value = np.NaN
+    values = np.ma.filled(values)
+    byte_io = io.BytesIO()
+    byte_io.write(values.tobytes())
+    byte_io.seek(0)
+    return byte_io
 

@@ -6,7 +6,7 @@ import os
 import json
 
 import roxar2raster
-from roxar2json import roxar_proxy as roxar
+import roxar_proxy as roxar
 
 if __name__ == "__main__":
     PARSER = argparse.ArgumentParser(
@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     if PARSER.prog == "surface2raster":
         PARSER.add_argument(
-                "-e", "--encoding", type=str, help="Encoding: image, webviz_absolute or webviz_normalized"
+                "-e", "--encoding", type=str, help="Encoding: image, webviz_absolute, webviz_normalized, npz or float32"
         )
         PARSER.add_argument(
                 "-n", "--name", type=str, help="Surface name."
@@ -55,6 +55,12 @@ if __name__ == "__main__":
                                 roxar_project, ARGS.name, category, stype)
                     elif ARGS.encoding == "ieee_float":
                         image = roxar2raster.get_surface_ieee_float(
+                                roxar_project, ARGS.name, category, stype)
+                    elif ARGS.encoding == "npz":
+                        image = roxar2raster.get_surface_npz(
+                                roxar_project, ARGS.name, category, stype)
+                    elif ARGS.encoding == "float32":
+                        image = roxar2raster.get_surface_float32(
                                 roxar_project, ARGS.name, category, stype)
                     else:
                         image = roxar2raster.get_surface(
