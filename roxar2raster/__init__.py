@@ -35,16 +35,17 @@ def array2d_to_ieee_float(z_array):
 
     test_image = Image.open(byte_io)
 
-    test_buffer = test_image.tobytes(encoder_name='raw')
+    test_buffer = test_image.tobytes(encoder_name="raw")
 
-    test_array = np.frombuffer(test_buffer, dtype=np.dtype('float32'))
+    test_array = np.frombuffer(test_buffer, dtype=np.dtype("float32"))
     test_array = test_array.reshape((shape[0], shape[1]))
 
     byte_io.seek(0)
 
-    assert(np.array_equal(test_array, z_array, equal_nan=True))
+    assert np.array_equal(test_array, z_array, equal_nan=True)
 
     return byte_io
+
 
 def pad_frame(values):
     mask = values.mask
@@ -224,7 +225,7 @@ def get_surface_float32(project, name, category, stype):
     byte_io.seek(0)
     return byte_io
 
+
 def get_surface_ieee_float(project, name, category, stype):
     surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
     return array2d_to_ieee_float(surface.values)
-
