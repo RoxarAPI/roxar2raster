@@ -22,6 +22,8 @@ def array2d_to_ieee_float(z_array):
 
     z_array = np.ma.filled(z_array)
 
+    z_array = np.rot90(z_array)
+
     byte_array = np.frombuffer(z_array.tobytes(), dtype=np.uint8)
     byte_array = byte_array.reshape((shape[0], shape[1], 4))
 
@@ -84,8 +86,6 @@ def get_margin(values):
 
 
 def array2d_to_webviz_float(z_array):
-    shape = z_array.shape
-
     z_array.fill_value = np.NaN
 
     z_array = np.ma.filled(z_array)

@@ -60,7 +60,7 @@ if __name__ == "__main__":
                         image = roxar2raster.get_surface_webviz_float(
                             roxar_project, ARGS.name, category, stype
                         )
-                    elif ARGS.encoding == "ieee_float":
+                    elif ARGS.encoding == "ieee_float_png":
                         image = roxar2raster.get_surface_ieee_float(
                             roxar_project, ARGS.name, category, stype
                         )
