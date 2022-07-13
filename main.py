@@ -21,7 +21,7 @@ if __name__ == "__main__":
             "-e",
             "--encoding",
             type=str,
-            help="Encoding: image, webviz_absolute, webviz_normalized, npz or float32",
+            help="Encoding: image, webviz_absolute, webviz_normalized, npz, float32 or ieee_float_png",
         )
         PARSER.add_argument("-n", "--name", type=str, help="Surface name.")
         PARSER.add_argument(
