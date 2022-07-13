@@ -1,5 +1,7 @@
 #!python3
 
+"Script for extracting raster formats from the RoxarAPI."
+
 import argparse
 import sys
 import os

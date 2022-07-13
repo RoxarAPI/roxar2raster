@@ -1,3 +1,5 @@
+"Module for extracting raster formats from the RoxarAPI."
+
 import io
 
 import numpy as np
