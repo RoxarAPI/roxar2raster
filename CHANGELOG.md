@@ -2,6 +2,17 @@
 
 <!--next-version-placeholder-->
 
+## v0.5.0 (2022-07-13)
+### Feature
+* Re-introduced ieee float png format. ([`2e6e23d`](https://github.com/RoxarAPI/roxar2raster/commit/2e6e23dddcb48ba0ddc94ff5931883ed77a6a956))
+
+### Fix
+* Fixed assertion. ([`b2424eb`](https://github.com/RoxarAPI/roxar2raster/commit/b2424eb0d56bdaa833f613f8a7527005c1b66406))
+* Applied rotation. ([`fb4d0c5`](https://github.com/RoxarAPI/roxar2raster/commit/fb4d0c51a85bebc4a659dfc99ad419b573e5f1fc))
+
+### Documentation
+* Updated documentation. ([`541524c`](https://github.com/RoxarAPI/roxar2raster/commit/541524ce34c445c36ad0d4a20f3acf13f21616c9))
+
 ## v0.4.0 (2022-06-17)
 ### Feature
 * Added compressed numpy and float32 buffer encoding. ([`299e311`](https://github.com/RoxarAPI/roxar2raster/commit/299e3115e288dc60fee7966b3f872222a0760c55))
