@@ -1,5 +1,7 @@
 #!python3
 
+"Script for extracting raster formats from the RoxarAPI."
+
 import argparse
 import sys
 import os
@@ -19,7 +21,7 @@ if __name__ == "__main__":
             "-e",
             "--encoding",
             type=str,
-            help="Encoding: image, webviz_absolute, webviz_normalized, npz or float32",
+            help="Encoding: image, webviz_absolute, webviz_normalized, npz, float32 or ieee_float_png",
         )
         PARSER.add_argument("-n", "--name", type=str, help="Surface name.")
         PARSER.add_argument(
@@ -60,7 +62,7 @@ if __name__ == "__main__":
                         image = roxar2raster.get_surface_webviz_float(
                             roxar_project, ARGS.name, category, stype
                         )
-                    elif ARGS.encoding == "ieee_float":
+                    elif ARGS.encoding == "ieee_float_png":
                         image = roxar2raster.get_surface_ieee_float(
                             roxar_project, ARGS.name, category, stype
                         )

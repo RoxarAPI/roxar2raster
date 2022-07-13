@@ -1,3 +1,5 @@
+"Module for extracting raster formats from the RoxarAPI."
+
 import io
 
 import numpy as np
@@ -11,6 +13,40 @@ import xtgeo.plot
 __version__ = "0.4.0"
 
 PAD_WIDTH = 2
+
+
+def array2d_to_ieee_float(z_array):
+
+    z_array = z_array.astype(np.float32)
+
+    z_array.fill_value = np.NaN
+
+    z_array = np.ma.filled(z_array)
+
+    z_array = np.rot90(z_array)
+    shape = z_array.shape
+
+    byte_array = np.frombuffer(z_array.tobytes(), dtype=np.uint8)
+    byte_array = byte_array.reshape((shape[0], shape[1], 4))
+
+    image = Image.fromarray(byte_array, "RGBA")
+
+    byte_io = io.BytesIO()
+    image.save(byte_io, format="png")
+    byte_io.seek(0)
+
+    test_image = Image.open(byte_io)
+
+    test_buffer = test_image.tobytes(encoder_name="raw")
+
+    test_array = np.frombuffer(test_buffer, dtype=np.dtype("float32"))
+    test_array = test_array.reshape((shape[0], shape[1]))
+
+    byte_io.seek(0)
+
+    assert np.array_equal(test_array, z_array, equal_nan=True)
+
+    return byte_io
 
 
 def pad_frame(values):
@@ -53,8 +89,6 @@ def get_margin(values):
 
 
 def array2d_to_webviz_float(z_array):
-    shape = z_array.shape
-
     z_array.fill_value = np.NaN
 
     z_array = np.ma.filled(z_array)
@@ -192,3 +226,8 @@ def get_surface_float32(project, name, category, stype):
     byte_io.write(values.tobytes())
     byte_io.seek(0)
     return byte_io
+
+
+def get_surface_ieee_float(project, name, category, stype):
+    surface = xtgeo.surface_from_roxar(project, name, category, stype=stype)
+    return array2d_to_ieee_float(surface.values)
